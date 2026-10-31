@@ -1,0 +1,21 @@
+services:
+  bot:
+    build: .
+    container_name: autoreactionbot
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGO_URI=${MONGO_URI:-mongodb://mongo:27017}
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:7
+    container_name: autoreactionbot-mongo
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    # Not published to the host on purpose: only the bot container can reach it.
+
+volumes:
+  mongo_data:
